@@ -2155,95 +2155,10 @@
 			if ( opt.customTopBar) html += ' custom-topbar ';
 			html += '">';
 
-			if (opt.showTopbar)
-			{
-				html += '<div class="drp_top-bar">';
-
-				if (opt.customTopBar)
-				{
-					if (typeof opt.customTopBar == 'function') opt.customTopBar = opt.customTopBar();
-					html += '<div class="custom-top">'+opt.customTopBar+'</div>';
-				}
-				else
-				{
-					html += '<div class="normal-top">' +
-							'<span style="color:#333">'+lang('selected')+' </span> <b class="start-day">...</b>';
-					if ( ! opt.singleDate ) {
-						html += ' <span class="separator-day">'+opt.separator+'</span> <b class="end-day">...</b> <i class="selected-days">(<span class="selected-days-num">3</span> '+lang('days')+')</i>';
-					}
-					html += '</div>';
-					html += '<div class="error-top">error</div>' +
-						'<div class="default-top">default</div>';
-				}
-
-				html += '<input type="button" class="apply-btn disabled'+ getApplyBtnClass() +'" value="'+lang('apply')+'" />';
-				html += '</div>';
-			}
-
-			var _colspan = opt.showWeekNumbers ? 6 : 5;
-
-            var arrowPrev = '&lt;';
-            if(opt.customArrowPrevSymbol) arrowPrev = opt.customArrowPrevSymbol;
-            
-            var arrowNext = '&gt;';
-            if(opt.customArrowNextSymbol) arrowNext = opt.customArrowNextSymbol;
-
-            html += '<div class="month-wrapper">' +
-                    '   <table class="month1" cellspacing="0" border="0" cellpadding="0">'+
-                    '       <thead>'+
-                    '           <tr class="caption">'+
-                    '               <th style="width:27px;">'+
-                    '                   <span class="prev">'+
-                                            arrowPrev +
-                    '                   </span>'+
-                    '               </th>'+
-                    '               <th colspan="' + _colspan + '" class="month-name">'+
-                    '               </th>'+
-                    '               <th style="width:27px;">' + 
-                                    (opt.singleDate || !opt.stickyMonths ? '<span class="next">' + arrowNext + '</span>' : '') + 
-                    '               </th>'+
-                    '           </tr>'+
-                    '           <tr class="week-name">' + getWeekHead() + 
-                    '       </thead>'+
-                    '       <tbody></tbody>'+
-                    '   </table>';
-
-			if ( hasMonth2() )
-			{
-				html += '<div class="gap">' + getGapHTML() + '</div>' +
-                        '<table class="month2" cellspacing="0" border="0" cellpadding="0">'+
-                        '   <thead>'+
-                        '   <tr class="caption">'+
-                        '       <th style="width:27px;">' + 
-                                (!opt.stickyMonths ? '<span class="prev">' + arrowPrev + '</span>' : '') + 
-                        '       </th>'+
-                        '       <th colspan="' + _colspan + '" class="month-name">'+
-                        '       </th>'+
-                        '       <th style="width:27px;">'+
-                        '           <span class="next">' + arrowNext + '</span>'+
-                        '       </th>'+
-                        '   </tr>'+
-                        '   <tr class="week-name">' + getWeekHead() + 
-                        '   </thead>'+
-                        '   <tbody></tbody>'+
-                        '</table>';
-
-			}
-				//+'</div>'
-			html +=	'<div style="clear:both;height:0;font-size:0;"></div>' +
-				'<div class="time">' +
-				'<div class="time1"></div>';
-			if ( ! opt.singleDate ) {
-				html += '<div class="time2"></div>';
-			}
-			html += '</div>' +
-				'<div style="clear:both;height:0;font-size:0;"></div>' +
-				'</div>';
-
-			html += '<div class="footer">';
+			// Shortcuts
 			if (opt.showShortcuts)
 			{
-				html += '<div class="shortcuts"><b>'+lang('shortcuts')+'</b>';
+				html += '<div class="shortcuts drp_top-bar"><b>'+lang('shortcuts')+'</b>';
 
 				var data = opt.shortcuts;
 				if (data)
@@ -2316,9 +2231,102 @@
 					for(var i=0;i<opt.customValues.length;i++)
 					{
 						var val = opt.customValues[i];
-							html+= '&nbsp;<span class="custom-value"><a href="javascript:;" custom="'+ val.value+'">'+val.name+'</a></span>';
+						html+= '&nbsp;<span class="custom-value"><a href="javascript:;" custom="'+ val.value+'">'+val.name+'</a></span>';
 					}
 				}
+			}
+
+			// Months with arrows.
+			var _colspan = opt.showWeekNumbers ? 6 : 5;
+
+            var arrowPrev = '&lt;';
+            if(opt.customArrowPrevSymbol) arrowPrev = opt.customArrowPrevSymbol;
+            
+            var arrowNext = '&gt;';
+            if(opt.customArrowNextSymbol) arrowNext = opt.customArrowNextSymbol;
+
+            // Cal 1
+            html += '<div class="month-wrapper">' +
+                    '   <table class="month1" cellspacing="0" border="0" cellpadding="0">'+
+                    '       <thead>'+
+                    '           <tr class="caption">'+
+                    '               <th style="width:27px;">'+
+                    '                   <span class="prev">'+
+                                            arrowPrev +
+                    '                   </span>'+
+                    '               </th>'+
+                    '               <th colspan="' + _colspan + '" class="month-name">'+
+                    '               </th>'+
+                    '               <th style="width:27px;">' + 
+                                    (opt.singleDate || !opt.stickyMonths ? '<span class="next">' + arrowNext + '</span>' : '') + 
+                    '               </th>'+
+                    '           </tr>'+
+                    '           <tr class="week-name">' + getWeekHead() + 
+                    '       </thead>'+
+                    '       <tbody></tbody>'+
+                    '   </table>';
+
+            // Cal 2
+			if ( hasMonth2() )
+			{
+				html += '<div class="gap">' + getGapHTML() + '</div>' +
+                        '<table class="month2" cellspacing="0" border="0" cellpadding="0">'+
+                        '   <thead>'+
+                        '   <tr class="caption">'+
+                        '       <th style="width:27px;">' + 
+                                (!opt.stickyMonths ? '<span class="prev">' + arrowPrev + '</span>' : '') + 
+                        '       </th>'+
+                        '       <th colspan="' + _colspan + '" class="month-name">'+
+                        '       </th>'+
+                        '       <th style="width:27px;">'+
+                        '           <span class="next">' + arrowNext + '</span>'+
+                        '       </th>'+
+                        '   </tr>'+
+                        '   <tr class="week-name">' + getWeekHead() + 
+                        '   </thead>'+
+                        '   <tbody></tbody>'+
+                        '</table>';
+
+			}
+				//+'</div>'
+
+			// Time selector
+			html +=	'<div style="clear:both;height:0;font-size:0;"></div>' +
+				'<div class="time">' +
+				'<div class="time1"></div>';
+			if ( ! opt.singleDate ) {
+				html += '<div class="time2"></div>';
+			}
+			html += '</div>' +
+				'<div style="clear:both;height:0;font-size:0;"></div>' +
+				'</div>';
+
+			html += '<div class="footer">';
+
+			// Bottom bar
+			if (opt.showTopbar)
+			{
+				html += '<div class="drp_top-bar">';
+
+				if (opt.customTopBar)
+				{
+					if (typeof opt.customTopBar == 'function') opt.customTopBar = opt.customTopBar();
+					html += '<div class="custom-top">'+opt.customTopBar+'</div>';
+				}
+				else
+				{
+					html += '<div class="normal-top">' +
+						'<span style="color:#333">'+lang('selected')+' </span> <b class="start-day">...</b>';
+					if ( ! opt.singleDate ) {
+						html += ' <span class="separator-day">'+opt.separator+'</span> <b class="end-day">...</b> <i class="selected-days">(<span class="selected-days-num">3</span> '+lang('days')+')</i>';
+					}
+					html += '</div>';
+					html += '<div class="error-top">error</div>' +
+						'<div class="default-top">default</div>';
+				}
+
+				html += '<input type="button" class="apply-btn disabled'+ getApplyBtnClass() +'" value="'+lang('apply')+'" />';
+				html += '</div>';
 			}
 
 			html += '</div></div>';
